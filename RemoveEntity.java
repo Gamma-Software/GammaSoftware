@@ -2,6 +2,9 @@
  * This Class is a static Class
  * Used to remove safely an Entity
  * 
+ * Tip:
+ * Use RemoveEntity.removeEntity(yourScene) to remove all children attached to the scene
+ * 
  * @author Valentin Rudloff - Gamma Software
  * Open source - Free to use
  */
@@ -17,14 +20,14 @@ public class RemoveEntity {
 	 * then dispose
 	 * @param entityToRemove
 	 */
-	public static void removeEntity(final Entity entityToRemove){
-		ResourceManager.getInstance().activity.runOnUiThread(new Runnable() {
+	public static void removeEntity(Activity activity, final Engine engine, final Entity entityToRemove){
+		activity.runOnUiThread(new Runnable() {
 			@Override
 			public void run() {
 				entityToRemove.clearEntityModifiers();
 				entityToRemove.clearUpdateHandlers();
 				
-				removeChildren(entityToRemove);
+				removeChildren(activity, engine, entityToRemove);
 				entityToRemove.detachSelf();
 				entityToRemove.dispose();
 			}
@@ -33,14 +36,15 @@ public class RemoveEntity {
 	
 	/**
 	 * Remove children
+	 * then dispose
 	 * @param entityToRemove
 	 */
-	public static void removeChildren(final Entity entityToRemove){
-		ResourceManager.getInstance().activity.runOnUiThread(new Runnable() {
+	public static void removeChildren(Activity activity, final Engine engine, final Entity entityToRemove){
+		activity.runOnUiThread(new Runnable() {
 			@Override
 			public void run() {
 				for(int i = 0; i < entityToRemove.getChildCount(); i++){
-
+					
 					final IEntity child = entityToRemove.getChildByIndex(i);
 					
 					child.clearEntityModifiers();
@@ -57,7 +61,7 @@ public class RemoveEntity {
 						}
 						
 					};
-					ResourceManager.getInstance().engine.registerUpdateHandler(run);
+					engine.registerUpdateHandler(run);
 				}
 					
 			}
