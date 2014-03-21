@@ -1,0 +1,3 @@
+GammaSoftware
+=============
+Free licenced
